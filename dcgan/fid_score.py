@@ -63,8 +63,9 @@ def get_activations(files, model, batch_size=64, dims=2048, cuda=False):
         batch=files
 
     #start_idx = 0
-    batch = TF.Grayscale(num_output_channels=3)(batch)
-    print(type(batch), ',', np.shape(batch))
+    
+    #batch = TF.Grayscale(num_output_channels=3)(batch)
+    #print(type(batch), ',', np.shape(batch))
     pred = model(batch)[0]
 
         # If model output is not scalar, apply global spatial average pooling.
