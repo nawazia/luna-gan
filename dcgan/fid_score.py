@@ -63,7 +63,7 @@ def get_activations(files, model, batch_size=64, dims=2048, cuda=False):
         batch=files
 
     #start_idx = 0
-    batch.repeat(1,3,1,1)
+    batch.expand(-1,3,-1,-1)
     print(type(batch))
     pred = model(batch)[0]
 
