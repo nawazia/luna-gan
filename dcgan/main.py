@@ -256,7 +256,6 @@ for epoch in range(opt.niter):
         D_G_z2 = output.mean().item()
         optimizerG.step()
 
-        fid = fid_score.calculate_fid_given_paths((real_cpu,fake))
 
         print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
               % (epoch, opt.niter, i, len(dataloader),
@@ -269,6 +268,7 @@ for epoch in range(opt.niter):
             vutils.save_image(fake.detach(),
                     '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
                     normalize=True)
+            fid = fid_score.calculate_fid_given_paths((real_cpu,fake))
             print('FID: %.4f' % (fid))
 
         if opt.dry_run:
