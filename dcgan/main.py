@@ -271,7 +271,7 @@ for epoch in range(opt.niter):
                     normalize=True)
 
         if (epoch%1==0):
-            print('\nFID: %.4f' % (fid))
+            print('FID: %.4f' % (fid))
 
         if opt.dry_run:
             break
