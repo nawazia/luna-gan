@@ -49,7 +49,7 @@ except ImportError:
     def tqdm(x):
         return x
 
-from dcgan.inception import InceptionV3
+from inception import InceptionV3
 
 
 def get_activations(files, model, batch_size=64, dims=2048, cuda=False):
