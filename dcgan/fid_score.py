@@ -63,6 +63,7 @@ def get_activations(files, model, batch_size=64, dims=2048, cuda=False):
         batch=files
 
     #start_idx = 0
+    batch.torch.tensor.repeat(1,3,1,1)
     pred = model(batch)[0]
 
         # If model output is not scalar, apply global spatial average pooling.
