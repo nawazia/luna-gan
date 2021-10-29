@@ -13,6 +13,7 @@ import torchvision.transforms as transforms
 import torchvision.utils as vutils
 
 import fid_score
+import numpy as np
 
 
 parser = argparse.ArgumentParser()
