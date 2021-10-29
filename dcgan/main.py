@@ -163,7 +163,7 @@ def fid(netG, real_samples_path, n_samples,device, outf, delete_samples=True):
             fake = (fake + 1.) /2.
             
             for jj in range(fake.size(0)):
-               vutils.save_image(torch.squeeze(fake[jj, :, 16, :, :]), f'{newOutf}im_{ii}_{jj}.png')
+               vutils.save_image(fake[jj, :, :, :].detach(), f'{newOutf}im_{ii}_{jj}.png')
     
     print('')
     netG.train()
