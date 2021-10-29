@@ -24,7 +24,7 @@ def fid(netG, real_samples_path, n_samples,device, outf, delete_samples=True):
     # THEN go to eval mode
     print('Running some generations to stabilise BN stats for DCGAN...')
     for jj in range(20):
-        z_noise = torch.randn(50, nz, device=device)
+        z_noise = torch.randn(50, netG.nz, device=device)
         fake = netG(z_noise)
         
     netG.eval()
@@ -39,7 +39,7 @@ def fid(netG, real_samples_path, n_samples,device, outf, delete_samples=True):
             else:
                 batchSize = 50
             print(f'\rStep {ii+1} of {n_steps}',end="")
-            z_noise = torch.randn(batchSize, nz, device=device)
+            z_noise = torch.randn(batchSize, netG.nz, device=device)
                   
             fake = netG(z_noise)
             
