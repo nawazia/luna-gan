@@ -12,7 +12,7 @@ import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
 
-import fid_score
+from fid import *
 
 
 parser = argparse.ArgumentParser()
@@ -260,7 +260,7 @@ for epoch in range(opt.niter):
         print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
               % (epoch, opt.niter, i, len(dataloader),
                  errD.item(), errG.item(), D_x, D_G_z1, D_G_z2))
-        if i == 0:
+        if i == len(dataloader):
             vutils.save_image(real_cpu,
                     '%s/real_samples.png' % opt.outf,
                     normalize=True)
@@ -268,8 +268,8 @@ for epoch in range(opt.niter):
             vutils.save_image(fake.detach(),
                     '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
                     normalize=True)
-            fid = fid_score.calculate_fid_given_paths((real_cpu,fake))
-            print('FID: %.4f' % (fid))
+            FID = fid(netG, opt.dataroot, 5000, device, ./outf)
+            print('FID: %.4f' % (FID))
 
         if opt.dry_run:
             break
