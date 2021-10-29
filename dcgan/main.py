@@ -268,7 +268,7 @@ for epoch in range(opt.niter):
             vutils.save_image(fake.detach(),
                     '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
                     normalize=True)
-            FID = fid(netG, opt.dataroot, 5000, device, ./outf)
+            FID = fid(netG, opt.dataroot, 5000, device, opt.outf)
             print('FID: %.4f' % (FID))
 
         if opt.dry_run:
