@@ -19,12 +19,11 @@ class LunaDataset(Dataset):
     def __init__(self, file
     
     ):
-        lungCT, _, _ = load_itk_image(file)
+        self.lungCT, _, _ = load_itk_image(file)
         ...
 
     def __len__(self):
-        return ...
-
+        return len(self.lungCT)
 
     def __getitem__(self, idx):
-        return ...
+        return self.lungCT[idx]
