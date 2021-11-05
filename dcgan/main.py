@@ -123,6 +123,9 @@ def weights_init(m):
         torch.nn.init.normal_(m.weight, 1.0, 0.02)
         torch.nn.init.zeros_(m.bias)
         
+def load_real():
+
+
 
 def fid(netG, real_samples_path, n_samples,device, outf, delete_samples=True):
     # netG: the generator model
@@ -333,7 +336,7 @@ for epoch in range(opt.niter):
             vutils.save_image(fake.detach(),
                     '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
                     normalize=True)
-            FID = fid(netG, opt.outf+'/samples', 5000, device, opt.outf)
+            FID = fid(netG, opt.outf+'/notsamples', 5000, device, opt.outf)
             print('FID: %.4f' % (FID))
 
         if opt.dry_run:
