@@ -14,6 +14,7 @@ import torchvision.utils as vutils
 
 import fid_score
 import numpy as np
+import shutil
 
 
 parser = argparse.ArgumentParser()
@@ -122,6 +123,7 @@ def weights_init(m):
         torch.nn.init.normal_(m.weight, 1.0, 0.02)
         torch.nn.init.zeros_(m.bias)
         
+
 def fid(netG, real_samples_path, n_samples,device, outf, delete_samples=True):
     # netG: the generator model
     # real_samples_path: path to the real data samples (this folder should contain ~5000-10000 images)
