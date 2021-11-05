@@ -123,7 +123,7 @@ def weights_init(m):
         torch.nn.init.normal_(m.weight, 1.0, 0.02)
         torch.nn.init.zeros_(m.bias)
         
-def load_real():
+#def load_real():
 
 
 
