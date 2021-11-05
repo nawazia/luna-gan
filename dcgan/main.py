@@ -37,6 +37,7 @@ parser.add_argument('--netD', default='', help="path to netD (to continue traini
 parser.add_argument('--outf', default='.', help='folder to output images and model checkpoints')
 parser.add_argument('--manualSeed', type=int, help='manual seed')
 parser.add_argument('--classes', default='bedroom', help='comma separated list of classes for the lsun data set')
+parser.add_argument('--real_samples_path', default=None, help='path to real samples dir, for FID calculation')
 
 opt = parser.parse_args()
 print(opt)
@@ -336,7 +337,7 @@ for epoch in range(opt.niter):
             vutils.save_image(fake.detach(),
                     '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
                     normalize=True)
-            FID = fid(netG, opt.outf+'/notsamples', 5000, device, opt.outf)
+            FID = fid(netG, opt.real_samples_path, 5000, device, opt.outf)
             print('FID: %.4f' % (FID))
 
         if opt.dry_run:
