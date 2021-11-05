@@ -16,8 +16,8 @@ def load_itk_image(filename):
     return numpyImage, numpyOrigin, numpySpacing
 
 class LunaDataset(Dataset):
-    def __init__(self, file
-    
+    def __init__(
+    self, file 
     ):
         self.lungCT, _, _ = load_itk_image(file)
         ...
