@@ -41,7 +41,7 @@ class LunaDataset(Dataset):
                 if seg[i,jx,jy]==0:
                     data[jx,jy] = 0
             patches.append(data)
-        return patches[idx]
+        return patches
 
 
 #t = LunaDataset('/Users/admin/Desktop/proj/data/')
