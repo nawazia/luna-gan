@@ -74,5 +74,5 @@ class LunaDataset(Dataset):
         return np.asarray(patches)
 
 
-t = LunaDataset('/Users/admin/Desktop/proj/data/')
-print(np.shape(t[6]))
+#t = LunaDataset('/Users/admin/Desktop/proj/data/')
+#print(np.shape(t[6]))
