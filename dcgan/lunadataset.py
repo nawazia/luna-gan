@@ -18,25 +18,24 @@ def load_itk_image(filename):
 
 
 def isLung(data, x, y):
-    for i in range(x, x+65):
-        for j in range(y, y+65):
+    for i in range(x, x+64):
+        for j in range(y, y+64):
             if data[i,j]==0:
                 return False
     return True
 
 
 def patch(data, x, y):
-    p =  np.zeros((64, 64))
+    p =  np.zeros((64, 64)) #[[0]*64 for i in range(64)]
     a = 0
-    b = 0
-    for i in range(x, x+65):
-        for j in range(y, y+65):
+    for i in range(x, x+64):
+        b = 0
+        for j in range(y, y+64):
             p[a,b] = data[i,j]
             b += 1
         a += 1
     return p
             
-
 
 class LunaDataset(Dataset):
     def __init__(
@@ -68,7 +67,12 @@ class LunaDataset(Dataset):
                 if isLung(data, x, y):
                     #ptch = patch(data, x, y)
                     patches.append(patch(data, x, y))
-        return patches
+                    print(patches[-1])
+                    plt.figure()
+                    plt.imshow(patches[-1])
+        #patches = np.array(patches)
+        return np.asarray(patches)
+
 
 t = LunaDataset('/Users/admin/Desktop/proj/data/')
 print(np.shape(t[6]))
