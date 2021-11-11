@@ -17,6 +17,27 @@ def load_itk_image(filename):
     return numpyImage, numpyOrigin, numpySpacing
 
 
+def isLung(data, x, y):
+    for i in range(x, x+65):
+        for j in range(y, y+65):
+            if data[i,j]==0:
+                return False
+    return True
+
+
+def patch(data, x, y):
+    p =  np.zeros((64, 64))
+    a = 0
+    b = 0
+    for i in range(x, x+65):
+        for j in range(y, y+65):
+            p[a,b] = data[i,j]
+            b += 1
+        a += 1
+    return p
+            
+
+
 class LunaDataset(Dataset):
     def __init__(
     self, subsets 
@@ -35,14 +56,19 @@ class LunaDataset(Dataset):
         lungCT, _, _ = load_itk_image(self.files[idx])      # Real scan, e.g. (133, 512, 512)
         # Segment lung tissue.
         seg, _, _ =  load_itk_image(self.subs + '/seg-lungs-LUNA16/' + os.path.basename(self.files[idx]))       # Seg scan, e.g. (133, 512, 512)
+        
         for i, data in enumerate(lungCT):
             for jx,jy in np.ndindex(seg[i].shape):
                 #print(seg[jx,jy])
-                if seg[i,jx,jy]==0:
-                    data[jx,jy] = 0
-            lungCT[i] = data
-        return lungCT
+                if seg[i, jx, jy] == 0:
+                    data[jx, jy] = 0
+#            lungCT[i] = data        # Now lungCT is segmented.
+            # Generate patches.
+            for x, y in np.ndindex(448, 448):
+                if isLung(data, x, y):
+                    #ptch = patch(data, x, y)
+                    patches.append(patch(data, x, y))
+        return patches
 
-
-#t = LunaDataset('/Users/admin/Desktop/proj/data/')
-#print(np.shape(t[6]))
+t = LunaDataset('/Users/admin/Desktop/proj/data/')
+print(np.shape(t[6]))
