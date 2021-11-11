@@ -40,8 +40,8 @@ class LunaDataset(Dataset):
                 #print(seg[jx,jy])
                 if seg[i,jx,jy]==0:
                     data[jx,jy] = 0
-            patches.append(data)
-        return patches
+            lungCT[i] = data
+        return lungCT
 
 
 #t = LunaDataset('/Users/admin/Desktop/proj/data/')
