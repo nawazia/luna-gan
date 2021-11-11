@@ -69,7 +69,8 @@ class LunaDataset(Dataset):
                     patches.append(patch(data, x, y))
                     #print(patches[-1])
                     plt.figure()
-                    plt.imshow(patches[-1])
+                    plt.imshow(patches[-1],cmap="gray")
+                    plt.show()
         #patches = np.array(patches)
         return np.asarray(patches)
 
