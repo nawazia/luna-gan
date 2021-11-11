@@ -67,7 +67,7 @@ class LunaDataset(Dataset):
                 if isLung(data, x, y):
                     #ptch = patch(data, x, y)
                     patches.append(patch(data, x, y))
-                    print(patches[-1])
+                    #print(patches[-1])
                     plt.figure()
                     plt.imshow(patches[-1])
         #patches = np.array(patches)
