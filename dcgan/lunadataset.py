@@ -69,13 +69,18 @@ class LunaDataset(Dataset):
                 if isLung(data, x, y):
                     #ptch = patch(data, x, y)
 
-                    #possible.append([i,x,y])
-                    patches.append(patch(data, x, y))
+                    possible.append([i,x,y])
 
                     #print(patches[-1])
                     #plt.figure()
                     #plt.imshow(patches[-1],cmap="gray")
                     #plt.show()
+        
+        sampled_idx = np.random.randint(0,len(possible),self.num_patch_per_CT)
+
+        for j in sampled_idx:
+            coor = possible[j]      #    [slice, x, y]
+            patches.append(patch(lungCT[j], coor[1], coor[2]))
 
         #patches = np.array(patches)
         return torch.Tensor(np.asarray(patches))
