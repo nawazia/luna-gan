@@ -106,7 +106,7 @@ elif opt.dataset == 'fake':
     nc=3
 
 elif opt.dataset == 'luna16':
-    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/')
+    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/', 1000)
     nc=1
 
 assert dataset
@@ -342,8 +342,8 @@ for epoch in range(opt.niter):
             vutils.save_image(fake.detach(),
                     '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
                     normalize=True)
-            FID = fid(netG, opt.real_samples_path, 5000, device, opt.outf)
-            print('FID: %.4f' % (FID))
+            #FID = fid(netG, opt.real_samples_path, 5000, device, opt.outf)
+            #print('FID: %.4f' % (FID))
 
         if opt.dry_run:
             break

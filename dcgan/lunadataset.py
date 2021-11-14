@@ -39,9 +39,10 @@ def patch(data, x, y):
 
 class LunaDataset(Dataset):
     def __init__(
-    self, subsets 
+    self, subsets, num_patch_per_ct
     ):
         self.subs = subsets
+        self.num_patch_per_ct = num_patch_per_ct
         self.files = glob.glob(subsets + '/subset*/*.mhd')
         #print(len(self.files))     // 888
         ...
@@ -51,6 +52,7 @@ class LunaDataset(Dataset):
 
     def __getitem__(self, idx):
         patches = []
+        possible = []
 
         lungCT, _, _ = load_itk_image(self.files[idx])      # Real scan, e.g. (133, 512, 512)
         # Segment lung tissue.
@@ -66,12 +68,15 @@ class LunaDataset(Dataset):
             for x, y in np.ndindex(448, 448):
                 if isLung(data, x, y):
                     #ptch = patch(data, x, y)
+
+                    #possible.append([i,x,y])
                     patches.append(patch(data, x, y))
+
                     #print(patches[-1])
-                    
                     #plt.figure()
                     #plt.imshow(patches[-1],cmap="gray")
                     #plt.show()
+
         #patches = np.array(patches)
         return torch.Tensor(np.asarray(patches))
 
