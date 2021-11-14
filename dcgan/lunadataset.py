@@ -68,11 +68,12 @@ class LunaDataset(Dataset):
                     #ptch = patch(data, x, y)
                     patches.append(patch(data, x, y))
                     #print(patches[-1])
-                    plt.figure()
-                    plt.imshow(patches[-1],cmap="gray")
-                    plt.show()
+                    
+                    #plt.figure()
+                    #plt.imshow(patches[-1],cmap="gray")
+                    #plt.show()
         #patches = np.array(patches)
-        return np.asarray(patches)
+        return torch.Tensor(np.asarray(patches))
 
 
 #t = LunaDataset('/Users/admin/Desktop/proj/data/')

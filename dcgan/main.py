@@ -12,6 +12,7 @@ import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
 
+import dcgan.lunadataset as ldset
 import fid_score
 import numpy as np
 import shutil
@@ -103,6 +104,10 @@ elif opt.dataset == 'fake':
     dataset = dset.FakeData(image_size=(3, opt.imageSize, opt.imageSize),
                             transform=transforms.ToTensor())
     nc=3
+
+elif opt.dataset == 'luna16':
+    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/')
+    nc=1
 
 assert dataset
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=opt.batchSize,
