@@ -12,7 +12,7 @@ import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
 
-import dcgan.lunadataset as ldset
+import lunadataset as ldset
 import fid_score
 import numpy as np
 import shutil
