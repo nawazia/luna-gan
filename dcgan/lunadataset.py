@@ -86,7 +86,7 @@ class LunaDataset(Dataset):
             print(len(patches))
 
         #patches = np.array(patches)
-        return torch.tensor(np.asarray(patches))
+        return torch.as_tensor(np.asarray(patches))
 
 
 #t = LunaDataset('/Users/admin/Desktop/proj/data/', 100)
