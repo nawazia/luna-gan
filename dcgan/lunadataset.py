@@ -75,7 +75,7 @@ class LunaDataset(Dataset):
                     #plt.figure()
                     #plt.imshow(patches[-1],cmap="gray")
                     #plt.show()
-            if i == 38:
+            if i == 40:
                 break
         
         sampled_idx = np.random.randint(0,len(possible),self.num_patch_per_ct)

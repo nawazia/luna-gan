@@ -106,7 +106,7 @@ elif opt.dataset == 'fake':
     nc=3
 
 elif opt.dataset == 'luna16':
-    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/', 1000)
+    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/', 100)
     nc=1
 
 assert dataset
