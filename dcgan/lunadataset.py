@@ -71,7 +71,7 @@ class LunaDataset(Dataset):
 
                     possible.append([i,x,y])
 
-                    print(possible[-1])
+                    #print(possible[-1])
                     #plt.figure()
                     #plt.imshow(patches[-1],cmap="gray")
                     #plt.show()
@@ -83,7 +83,7 @@ class LunaDataset(Dataset):
         for j in sampled_idx:
             coor = possible[j]      #    [slice, x, y]
             patches.append(patch(lungCT[coor[0]], coor[1], coor[2]))
-            print(len(patches))
+            #print(len(patches))
 
         #patches = np.array(patches)
         return torch.as_tensor(np.asarray(patches))
