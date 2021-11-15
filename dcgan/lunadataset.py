@@ -43,7 +43,7 @@ class LunaDataset(Dataset):
     ):
         self.subs = subsets
         self.num_patch_per_ct = num_patch_per_ct
-        self.files = glob.glob(subsets + '/subset0/*.mhd')
+        self.files = glob.glob(subsets + '/subset*/*.mhd')
         #print(len(self.files))     // 888
         ...
 
@@ -71,20 +71,23 @@ class LunaDataset(Dataset):
 
                     possible.append([i,x,y])
 
-                    #print(patches[-1])
+                    print(possible[-1])
                     #plt.figure()
                     #plt.imshow(patches[-1],cmap="gray")
                     #plt.show()
+            if i == 38:
+                break
         
-        sampled_idx = np.random.randint(0,len(possible),self.num_patch_per_CT)
+        sampled_idx = np.random.randint(0,len(possible),self.num_patch_per_ct)
 
         for j in sampled_idx:
             coor = possible[j]      #    [slice, x, y]
-            patches.append(patch(lungCT[j], coor[1], coor[2]))
+            patches.append(patch(lungCT[coor[0]], coor[1], coor[2]))
+            print(len(patches))
 
         #patches = np.array(patches)
-        return torch.Tensor(np.asarray(patches))
+        return torch.tensor(patches)
 
 
-#t = LunaDataset('/Users/admin/Desktop/proj/data/')
-#print(np.shape(t[6]))
+#t = LunaDataset('/Users/admin/Desktop/proj/data/', 100)
+#print(t[6])
