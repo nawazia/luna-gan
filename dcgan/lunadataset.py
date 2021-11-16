@@ -85,7 +85,7 @@ class LunaDataset(Dataset):
             patches.append(patch(lungCT[coor[0]], coor[1], coor[2]))
             #print(len(patches))
 
-        patches = torch.as_tensor(np.asarray(patches))
+        patches = torch.as_tensor(np.asarray(patches), dtype=torch.float)
         patches = patches.unsqueeze(1)
 
         #patches = np.array(patches)
