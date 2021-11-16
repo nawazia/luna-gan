@@ -75,7 +75,7 @@ class LunaDataset(Dataset):
                     #plt.figure()
                     #plt.imshow(patches[-1],cmap="gray")
                     #plt.show()
-            if len(possible) >= 500:
+            if len(possible) >= 200:
                 break
         
         sampled_idx = np.random.randint(0,len(possible),self.num_patch_per_ct)
@@ -85,8 +85,11 @@ class LunaDataset(Dataset):
             patches.append(patch(lungCT[coor[0]], coor[1], coor[2]))
             #print(len(patches))
 
+        patches = torch.as_tensor(np.asarray(patches))
+        patches = patches.unsqueeze(1)
+
         #patches = np.array(patches)
-        return torch.as_tensor(np.asarray(patches))
+        return patches
 
 
 #t = LunaDataset('/Users/admin/Desktop/proj/data/', 100)
