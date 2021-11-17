@@ -19,7 +19,7 @@ import shutil
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--dataset', required=True, help='cifar10 | lsun | mnist |imagenet | folder | lfw | fake')
+parser.add_argument('--dataset', required=True, help='cifar10 | lsun | mnist |imagenet | folder | lfw | fake \ luna16')
 parser.add_argument('--dataroot', required=False, help='path to dataset')
 parser.add_argument('--workers', type=int, help='number of data loading workers', default=2)
 parser.add_argument('--batchSize', type=int, default=64, help='input batch size')
@@ -106,7 +106,7 @@ elif opt.dataset == 'fake':
     nc=3
 
 elif opt.dataset == 'luna16':
-    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/', 1000)
+    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/', 1)
     nc=1
 
 assert dataset
