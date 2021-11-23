@@ -15,6 +15,9 @@ from skimage.util import view_as_windows
 import pylidc as pl # module for handling the LIDC dataset
 from pylidc.utils import consensus
 
+import glob
+import os
+
 #%%
 def load_itk_image(filename):
     itkimage = sitk.ReadImage(filename)
@@ -47,12 +50,12 @@ def normalizeVolume(npzarray):
 #%% data loading
 class patchLoader(Dataset):
     
-    def __init__(self, imageListCT, lungSegListCT, num_patch_per_CT, dType=torch.float32):
+    def __init__(self, subsets, num_patch_per_CT, dType=torch.float32):
         # imageListCT should be a list of FULL PATHS to mhd files
         # lungSegListCT should be a list of FULL PATHS to seg mhd files
-        
-        self.imageListCT = imageListCT
-        self.lungSegListCT = lungSegListCT
+
+        self.imageListCT = glob.glob(subsets + '/subset0/*.mhd')
+        self.lungSegListCT = subsets + '/seg-lungs-LUNA16/*.mhd'
         self.num_patch_per_CT = num_patch_per_CT
         self.dType = dType
         self.patch_size = [32,64,64]
