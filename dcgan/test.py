@@ -55,7 +55,7 @@ class patchLoader(Dataset):
         # lungSegListCT should be a list of FULL PATHS to seg mhd files
 
         self.imageListCT = glob.glob(subsets + '/subset0/*.mhd')
-        self.lungSegListCT = subsets + '/seg-lungs-LUNA16/*.mhd'
+        self.lungSegListCT = glob.glob(subsets + '/seg-lungs-LUNA16/*.mhd')
         self.num_patch_per_CT = num_patch_per_CT
         self.dType = dType
         self.patch_size = [32,64,64]
