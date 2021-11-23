@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import glob
 import os
-import pylidc as pl
+#import pylidc as pl
 
 
 def load_itk_image(filename):
@@ -59,13 +59,13 @@ class LunaDataset(Dataset):
         # Segment lung tissue.
         seg, _, _ =  load_itk_image(self.subs + '/seg-lungs-LUNA16/' + os.path.basename(self.files[idx]))       # Seg scan, e.g. (133, 512, 512)
         
-        bbox = np.array([ [0, len(lungCT[0])-1], [0, len(lungCT[1])-1], [0, len(lungCT[2])-1] ])
-        ann = pl.query(pl.Annotation).filter(pl.Scan.series_instance_uid == os.path.basename(self.files[idx])[0:-4])[0]
-        mask = ann.boolean_mask(bbox=bbox)
+        #bbox = np.array([ [0, len(lungCT[0])-1], [0, len(lungCT[1])-1], [0, len(lungCT[2])-1] ])
+        #ann = pl.query(pl.Annotation).filter(pl.Scan.series_instance_uid == os.path.basename(self.files[idx])[0:-4])[0]
+        #mask = ann.boolean_mask(bbox=bbox)
         
         for i, data in enumerate(lungCT):
-            plt.figure()
-            plt.imshow(data)
+            #plt.figure()
+            #plt.imshow(data)
             for jx,jy in np.ndindex(seg[i].shape):
                 #print(seg[jx,jy])
                 if seg[i, jx, jy] == 0:
