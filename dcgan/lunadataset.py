@@ -51,11 +51,11 @@ class LunaDataset(Dataset):
         # Segment lung tissue.
         lungMask = np.logical_or(seg == 3, seg == 4).astype('int16')        # 1 = Lung, 0 = Non-lung
 
-        bbox = np.array([ [0, len(lungCT)], [0, len(lungCT[0])], [0, len(lungCT[1])] ])
+        bbox = np.array([ [0, len(lungCT)-1], [0, len(lungCT[0])-1], [0, len(lungCT[1])-1] ])
         ann = pl.query(pl.Annotation).filter(pl.Scan.series_instance_uid == os.path.basename(self.files[idx])[0:-4])[0]
         noduleMask = ann.boolean_mask(bbox=bbox)     # 1 = Nodule, 0 = Non-Nodule.
         #   (512, 512, 133)
-        noduleMask = np.transpose(noduleMask, (2, 0, 1))
+        #noduleMask = np.transpose(noduleMask, (2, 0, 1))
         #   (133, 512, 512)
 
         mask = np.logical_and(lungMask==1,noduleMask==0).astype('int16')        # 1 = lung+non-nodule, 0 = non-lung/nodule
