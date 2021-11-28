@@ -66,7 +66,7 @@ class LunaDataset(Dataset):
         
         valid_idx = np.stack(np.where(selectionMask==1))
         sampled_idx = np.random.randint(0,valid_idx.shape[1],self.num_patch_per_ct)
-        print('len of sampled_idx: ',len(sampled_idx))
+        #print('len of sampled_idx: ',len(sampled_idx))     # len of sampled_idx:  100
 
         patch_centres = valid_idx[:,sampled_idx]
 
@@ -76,11 +76,8 @@ class LunaDataset(Dataset):
 
         extractedPatches = patch_view[tuple(patch_centres)].copy() # indexing into first 3 dims gives patches for those voxels
 
-        #extractedPatches = torch.as_tensor((extractedPatches), dtype=torch.float)
-        print('len of extractedPatches: ',extractedPatches.shape)
-
-        #patches = torch.as_tensor(np.asarray(patches), dtype=torch.float)
-        #patches = patches.unsqueeze(1)
+        extractedPatches = torch.as_tensor((extractedPatches), dtype=torch.float)
+        #print('len of extractedPatches: ',extractedPatches.size())      # len of extractedPatches:  (100, 1, 64, 64)
 
         return extractedPatches
 
