@@ -12,7 +12,7 @@ import torchvision.datasets as dset
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
 
-import test as ldset
+import lunadataset as ldset
 import fid_score
 import numpy as np
 import shutil
@@ -106,7 +106,7 @@ elif opt.dataset == 'fake':
     nc=3
 
 elif opt.dataset == 'luna16':
-    dataset = ldset.patchLoader('/content/drive/My Drive/luna16/data/', 1)
+    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/', 1)
     nc=1
 
 assert dataset
