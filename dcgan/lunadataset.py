@@ -56,7 +56,7 @@ class LunaDataset(Dataset):
         noduleMask = ann.boolean_mask(bbox=bbox)     # 1 = Nodule, 0 = Non-Nodule.
         print(noduleMask.shape)
         #   (512, 512, 133)
-        #noduleMask = np.transpose(noduleMask, (2, 0, 1))
+        noduleMask = np.transpose(noduleMask, (2, 0, 1))
         #   (133, 512, 512)
 
         mask = np.logical_and(lungMask==1,noduleMask==0).astype('int16')        # 1 = lung+non-nodule, 0 = non-lung/nodule
