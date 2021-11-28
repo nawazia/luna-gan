@@ -76,8 +76,8 @@ class LunaDataset(Dataset):
 
         extractedPatches = patch_view[tuple(patch_centres)].copy() # indexing into first 3 dims gives patches for those voxels
 
-        extractedPatches = torch.as_tensor((extractedPatches), dtype=torch.float)
-        print('len of extractedPatches: ',extractedPatches.size())
+        #extractedPatches = torch.as_tensor((extractedPatches), dtype=torch.float)
+        print('len of extractedPatches: ',extractedPatches.shape)
 
         #patches = torch.as_tensor(np.asarray(patches), dtype=torch.float)
         #patches = patches.unsqueeze(1)
