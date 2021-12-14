@@ -299,8 +299,7 @@ for epoch in range(opt.niter):
         ###########################
         # train with real
         print('b4',data.size())
-        data = data.squeeze()
-        data = data.unsqueeze(1)
+        data = data.permute(1,0,2,3,4)
         print('af',data.size())
         netD.zero_grad()
         real_cpu = data[0].to(device)
