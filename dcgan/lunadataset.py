@@ -43,7 +43,7 @@ class LunaDataset(Dataset):
         ...
 
     def __len__(self):
-        return len(self.files)
+        return len(self.files)*self.num_patch_per_ct
 
     def __getitem__(self, idx):
         lungCT, _, _ = load_itk_image(self.files[idx])      # Real scan, e.g. (133, 512, 512)
