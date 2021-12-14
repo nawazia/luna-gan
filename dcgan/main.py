@@ -298,8 +298,10 @@ for epoch in range(opt.niter):
         # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
         ###########################
         # train with real
-        print(data)
-        print(data.size())
+        print('b4',data.size())
+        data = data.squeeze()
+        data = data.unsqueeze(1)
+        print('af',data.size())
         netD.zero_grad()
         real_cpu = data[0].to(device)
         batch_size = real_cpu.size(0)
