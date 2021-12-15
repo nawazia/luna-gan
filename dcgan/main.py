@@ -305,7 +305,7 @@ for epoch in range(opt.niter):
         real_cpu = data[0].to(device)
         print('real_cpu',real_cpu.size())
         batch_size = real_cpu.size(0)
-        print('batch_size',batch_size.size())
+        print('batch_size',batch_size.shape)
         label = torch.full((batch_size,), real_label,
                            dtype=real_cpu.dtype, device=device)
 
