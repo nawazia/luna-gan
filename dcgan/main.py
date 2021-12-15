@@ -22,7 +22,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', required=True, help='cifar10 | lsun | mnist |imagenet | folder | lfw | fake \ luna16')
 parser.add_argument('--dataroot', required=False, help='path to dataset')
 parser.add_argument('--workers', type=int, help='number of data loading workers', default=2)
-parser.add_argument('--batchSize', type=int, default=64, help='input batch size')
+parser.add_argument('--num_patch_per_ct', type=int, default=100, help='number of patches per CT, effectively the batchSize')
 parser.add_argument('--imageSize', type=int, default=64, help='the height / width of the input image to network')
 parser.add_argument('--nz', type=int, default=100, help='size of the latent z vector')
 parser.add_argument('--ngf', type=int, default=64)
@@ -62,6 +62,9 @@ if torch.cuda.is_available() and not opt.cuda:
   
 if opt.dataroot is None and str(opt.dataset).lower() != 'fake':
     raise ValueError("`dataroot` parameter is required for dataset \"%s\"" % opt.dataset)
+
+if opt.real_samples_path is None:
+    raise ValueError("`real_samples_path` parameter is required for FID calculations!")
 
 if opt.dataset in ['imagenet', 'folder', 'lfw']:
     # folder dataset
@@ -107,11 +110,11 @@ elif opt.dataset == 'fake':
     nc=3
 
 elif opt.dataset == 'luna16':
-    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/', 100)
+    dataset = ldset.LunaDataset('/content/drive/My Drive/luna16/data/', opt.num_patch_per_ct)
     nc=1
 
 assert dataset
-dataloader = torch.utils.data.DataLoader(dataset, batch_size=opt.batchSize,
+dataloader = torch.utils.data.DataLoader(dataset, batch_size=1,
                                          shuffle=True, num_workers=int(opt.workers))
 
 device = torch.device("cuda:0" if opt.cuda else "cpu")
@@ -281,7 +284,7 @@ print(netD)
 
 criterion = nn.BCELoss()
 
-fixed_noise = torch.randn(100, nz, 1, 1, device=device)
+fixed_noise = torch.randn(opt.num_patch_per_ct, nz, 1, 1, device=device)
 real_label = 1
 fake_label = 0
 
@@ -298,14 +301,13 @@ for epoch in range(opt.niter):
         # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
         ###########################
         # train with real
-        #print('b4',data.size())     # 1,100,1,64,64
+        #print('data: ',data.size())     # 1,100,1,64,64
         #data = data.permute(1,0,2,3,4)
-        #print('af',data.size())     # 100,1,1,64,64
         netD.zero_grad()
         real_cpu = data[0].to(device)
-        #print('real_cpu: ',real_cpu.size())
+        #print('real_cpu: ',real_cpu.size())        # 100,1,64,64
         batch_size = real_cpu.size(0)
-        #print('batch_size: ',batch_size)
+        #print('batch_size: ',batch_size)       # 100
         label = torch.full((batch_size,), real_label,
                            dtype=real_cpu.dtype, device=device)
 
@@ -350,8 +352,8 @@ for epoch in range(opt.niter):
             vutils.save_image(fake.detach(),
                     '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
                     normalize=True)
-            #FID = fid(netG, opt.real_samples_path, 5000, device, opt.outf)
-            #print('FID: %.4f' % (FID))
+            FID = fid(netG, opt.real_samples_path, 10000, device, opt.outf)
+            print('FID: %.4f' % (FID))
 
         if opt.dry_run:
             break
