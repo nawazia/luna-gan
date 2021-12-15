@@ -298,14 +298,14 @@ for epoch in range(opt.niter):
         # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
         ###########################
         # train with real
-        #print('b4',data.size())     # 1,100,1,64,64
-        data = data.permute(1,0,2,3,4)
+        print('b4',data.size())     # 1,100,1,64,64
+        #data = data.permute(1,0,2,3,4)
         #print('af',data.size())     # 100,1,1,64,64
         netD.zero_grad()
         real_cpu = data[0].to(device)
         print('real_cpu',real_cpu.size())
         batch_size = real_cpu.size(0)
-        print('batch_size',batch_size.size())
+        #print('batch_size',batch_size.size())
         label = torch.full((batch_size,), real_label,
                            dtype=real_cpu.dtype, device=device)
 
