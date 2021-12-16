@@ -365,6 +365,7 @@ for epoch in range(opt.niter):
     torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (opt.outf, epoch))
     torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (opt.outf, epoch))
 
+plt.figure()
 plt.plot(fidscores, '.k')
 plt.ylabel('FID score')
 plt.xlabel('Epoch number')
