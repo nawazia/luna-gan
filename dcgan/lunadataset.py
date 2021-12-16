@@ -37,7 +37,7 @@ class LunaDataset(Dataset):
     ):
         self.subsets = subsets
         self.num_patch_per_ct = num_patch_per_ct
-        self.files = glob.glob(subsets + '/subset0/*.mhd')
+        self.files = glob.glob(subsets + '/subset*/*.mhd')
         self.files_seg = glob.glob(subsets + '/seg-lungs-LUNA16/*.mhd')
         #print(len(self.files))     // 888
         ...
