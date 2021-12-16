@@ -16,6 +16,7 @@ import lunadataset as ldset
 import fid_score
 import numpy as np
 import shutil
+import matplotlib.pyplot as plt
 
 
 parser = argparse.ArgumentParser()
@@ -295,6 +296,8 @@ optimizerG = optim.Adam(netG.parameters(), lr=opt.lr_g, betas=(opt.beta1, 0.999)
 if opt.dry_run:
     opt.niter = 1
 
+fidscores = []
+
 for epoch in range(opt.niter):
     for i, data in enumerate(dataloader, 0):
         ############################
@@ -354,9 +357,15 @@ for epoch in range(opt.niter):
                     normalize=True)
             FID = fid(netG, opt.real_samples_path, 10000, device, opt.outf)
             print('FID: %.4f' % (FID))
+            fidscores.append(FID)
 
         if opt.dry_run:
             break
     # do checkpointing
     torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (opt.outf, epoch))
     torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (opt.outf, epoch))
+
+plt.plot(fidscores, '.k')
+plt.ylabel('FID score')
+plt.xlabel('Epoch number')
+plt.show()
