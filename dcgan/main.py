@@ -355,9 +355,9 @@ for epoch in range(opt.niter):
             vutils.save_image(fake.detach(),
                     '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
                     normalize=True)
-            FID = fid(netG, opt.real_samples_path, 10000, device, opt.outf)
-            print('FID: %.4f' % (FID))
-            fidscores.append(FID)
+            #FID = fid(netG, opt.real_samples_path, 10000, device, opt.outf)
+            #print('FID: %.4f' % (FID))
+            #fidscores.append(FID)
 
         if opt.dry_run:
             break
@@ -365,8 +365,8 @@ for epoch in range(opt.niter):
     torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (opt.outf, epoch))
     torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (opt.outf, epoch))
 
-plt.figure()
-plt.plot(fidscores, '.k')
-plt.ylabel('FID score')
-plt.xlabel('Epoch number')
-plt.savefig('FIDs.png')
+# plt.figure()
+# plt.plot(fidscores, '.k')
+# plt.ylabel('FID score')
+# plt.xlabel('Epoch number')
+# plt.savefig('FIDs.png')
