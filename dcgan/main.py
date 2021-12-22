@@ -296,7 +296,7 @@ optimizerG = optim.Adam(netG.parameters(), lr=opt.lr_g, betas=(opt.beta1, 0.999)
 if opt.dry_run:
     opt.niter = 1
 
-fidscores = []
+fidscores = np.zeros(opt.niter)
 
 for epoch in range(opt.niter):
     for i, data in enumerate(dataloader, 0):
@@ -357,7 +357,7 @@ for epoch in range(opt.niter):
                     normalize=True)
             FID = fid(netG, opt.real_samples_path, 10000, device, opt.outf)
             print('FID: %.4f' % (FID))
-            fidscores.append(FID)
+            fidscores[epoch] = FID
 
         if opt.dry_run:
             break
