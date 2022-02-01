@@ -1,5 +1,6 @@
 import torch
 import torchvision.datasets as dsets
+import CustomDataset
 from torchvision import transforms
 
 
@@ -42,7 +43,7 @@ class Data_Loader():
 
     def load_off(self):
         transforms = self.transform(True, True, True, False)
-        dataset = dsets.ImageFolder(self.path, transform=transforms)
+        dataset = CustomDataset.CustomDataset(self.path, transform=transforms)
         return dataset
 
     def loader(self):
