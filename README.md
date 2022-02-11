@@ -1,5 +1,6 @@
-# LUNA-GAN
-
-DCGAN: !python dcgan/main.py
-BigGAN: !sh biggan/scripts/utils/prepare_data.sh, !python biggan/train.py
-StyleGAN2: ...idk yet bruh
+# DCGAN:
+`!python dcgan/main.py `
+# BigGAN:
+First `!sh biggan/scripts/utils/prepare_data.sh`, then `!python biggan/train.py`
+# StyleGAN2:
+...idk yet bruh
