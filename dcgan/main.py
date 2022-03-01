@@ -299,68 +299,79 @@ if opt.dry_run:
 fidscores = np.zeros(opt.niter)
 
 for epoch in range(opt.niter):
-    for i, data in enumerate(dataloader, 0):
-        ############################
-        # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
-        ###########################
-        # train with real
-        #print('data: ',data.size())     # 1,100,1,64,64
-        #data = data.permute(1,0,2,3,4)
-        netD.zero_grad()
-        real_cpu = data[0].to(device)
-        #print('real_cpu: ',real_cpu.size())        # 100,1,64,64
-        batch_size = real_cpu.size(0)
-        #print('batch_size: ',batch_size)       # 100
-        label = torch.full((batch_size,), real_label,
-                           dtype=real_cpu.dtype, device=device)
+    for i, data_full in enumerate(dataloader, 0):
 
-        output = netD(real_cpu)
-        errD_real = criterion(output, label)
-        errD_real.backward()
-        D_x = output.mean().item()
+        data_full_shuffle = data_full[0][torch.randperm(data_full.shape[1])] # have to index into data_full, since dataloader returns it with batchsize of 1
+        data_full_shuffle_split = torch.split(data_full_shuffle,opt.batch_size)
+        
+        data_full_split = torch.split(data_full[0],opt.batch_size)
 
-        # train with fake
-        noise = torch.randn(batch_size, nz, 1, 1, device=device)
-        fake = netG(noise)
-        label.fill_(fake_label)
-        output = netD(fake.detach())
-        errD_fake = criterion(output, label)
-        errD_fake.backward()
-        D_G_z1 = output.mean().item()
-        errD = errD_real + errD_fake
-        optimizerD.step()
+        for jj in range(len(data_full_split)):
 
-        ############################
-        # (2) Update G network: maximize log(D(G(z)))
-        ###########################
-        netG.zero_grad()
-        label.fill_(real_label)  # fake labels are real for generator cost
-        output = netD(fake)
-        errG = criterion(output, label)
-        errG.backward()
-        D_G_z2 = output.mean().item()
-        optimizerG.step()
+            ############################
+            # (1) Update D network: maximize log(D(x)) + log(1 - D(G(z)))
+            ###########################
+            # train with real
+            #print('data: ',data.size())     # 1,100,1,64,64
+            #data = data.permute(1,0,2,3,4)
+            netD.zero_grad()
+            real_cpu = data_full_split[jj].to(device)
+            #print('real_cpu: ',real_cpu.size())        # 100,1,64,64
+            batch_size = real_cpu.size(0)
+            #print('batch_size: ',batch_size)       # 100
+            label = torch.full((batch_size,), real_label,
+                            dtype=real_cpu.dtype, device=device)
+
+            output = netD(real_cpu)
+            errD_real = criterion(output, label)
+            errD_real.backward()
+            D_x = output.mean().item()
+
+            # train with fake
+            noise = torch.randn(batch_size, nz, 1, 1, device=device)
+            fake = netG(noise)
+            label.fill_(fake_label)
+            output = netD(fake.detach())
+            errD_fake = criterion(output, label)
+            errD_fake.backward()
+            D_G_z1 = output.mean().item()
+            errD = errD_real + errD_fake
+            optimizerD.step()
+
+            ############################
+            # (2) Update G network: maximize log(D(G(z)))
+            ###########################
+            netG.zero_grad()
+            # real_cpu = data_full_shuffle_split[jj].to(device)
+            # batch_size = real_cpu.size(0)
+            # label = netD(real_cpu)
+            label.fill_(real_label)  # fake labels are real for generator cost
+            output = netD(fake)
+            errG = criterion(output, label)
+            errG.backward()
+            D_G_z2 = output.mean().item()
+            optimizerG.step()
 
 
-        #Re: D_G_z1 & D_G_z2 - The first number is before D is updated and the second number is after D is updated.
+            #Re: D_G_z1 & D_G_z2 - The first number is before D is updated and the second number is after D is updated.
 
-        print('[%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
-              % (epoch, opt.niter, i, len(dataloader),
-                 errD.item(), errG.item(), D_x, D_G_z1, D_G_z2))
-        if i == len(dataloader)-1:
-            vutils.save_image(real_cpu,
-                    '%s/real_samples.png' % opt.outf,
-                    normalize=True)
-            fake = netG(fixed_noise)
-            vutils.save_image(fake.detach(),
-                    '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
-                    normalize=True)
-            FID = fid(netG, opt.real_samples_path, 10000, device, opt.outf)
-            print('FID: %.4f' % (FID))
-            fidscores[epoch] = FID
+            print('[%d/%d][%d/%d][%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f / %.4f'
+                % (epoch, opt.niter, i, len(dataloader), jj, len(data_full_split),
+                    errD.item(), errG.item(), D_x, D_G_z1, D_G_z2))
+            if i == len(dataloader)-1:
+                vutils.save_image(real_cpu,
+                        '%s/real_samples.png' % opt.outf,
+                        normalize=True)
+                fake = netG(fixed_noise)
+                vutils.save_image(fake.detach(),
+                        '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
+                        normalize=True)
+                FID = fid(netG, opt.real_samples_path, 10000, device, opt.outf)
+                print('FID: %.4f' % (FID))
+                fidscores[epoch] = FID
 
-        if opt.dry_run:
-            break
+            if opt.dry_run:
+                break
     # do checkpointing
     torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (opt.outf, epoch))
     torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (opt.outf, epoch))
