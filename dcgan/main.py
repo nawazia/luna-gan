@@ -23,7 +23,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', required=True, help='cifar10 | lsun | mnist |imagenet | folder | lfw | fake \ luna16')
 parser.add_argument('--dataroot', required=False, help='path to dataset')
 parser.add_argument('--workers', type=int, help='number of data loading workers', default=0)
-parser.add_argument('--num_patch_per_ct', type=int, default=100, help='number of patches per CT, effectively the batchSize')
+parser.add_argument('--num_patch_per_ct', type=int, default=256, help='number of patches per CT')
+parser.add_argument('--batch_size', type=int, default=16, help='batch size, note: num_patch_per_ct//batch_size must be 0')
 parser.add_argument('--imageSize', type=int, default=64, help='the height / width of the input image to network')
 parser.add_argument('--nz', type=int, default=100, help='size of the latent z vector')
 parser.add_argument('--ngf', type=int, default=64)
@@ -66,6 +67,8 @@ if opt.dataroot is None and str(opt.dataset).lower() != 'fake':
 
 if opt.real_samples_path is None:
     raise ValueError("`real_samples_path` parameter is required for FID calculations!")
+
+assert np.mod(opt.num_patch_per_ct, opt.batch_size) == 0
 
 if opt.dataset in ['imagenet', 'folder', 'lfw']:
     # folder dataset
@@ -133,9 +136,6 @@ def weights_init(m):
     elif classname.find('BatchNorm') != -1:
         torch.nn.init.normal_(m.weight, 1.0, 0.02)
         torch.nn.init.zeros_(m.bias)
-        
-#def load_real():
-
 
 
 def fid(netG, real_samples_path, n_samples,device, outf, delete_samples=True):
