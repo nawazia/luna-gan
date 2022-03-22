@@ -179,7 +179,7 @@ class Generator(nn.Module):
                                                 cross_replica=self.cross_replica,
                                                 mybn=self.mybn),
                                     self.activation,
-                                    self.which_conv(self.arch['out_channels'][-1], 3))
+                                    self.which_conv(self.arch['out_channels'][-1], 1))
 
     # Initialize weights. Optionally skip init for testing.
     if not skip_init:
@@ -254,25 +254,25 @@ class Generator(nn.Module):
 # Discriminator architecture, same paradigm as G's above
 def D_arch(ch=64, attention='64',ksize='333333', dilation='111111'):
   arch = {}
-  arch[256] = {'in_channels' :  [3] + [ch*item for item in [1, 2, 4, 8, 8, 16]],
+  arch[256] = {'in_channels' :  [1] + [ch*item for item in [1, 2, 4, 8, 8, 16]],
                'out_channels' : [item * ch for item in [1, 2, 4, 8, 8, 16, 16]],
                'downsample' : [True] * 6 + [False],
                'resolution' : [128, 64, 32, 16, 8, 4, 4 ],
                'attention' : {2**i: 2**i in [int(item) for item in attention.split('_')]
                               for i in range(2,8)}}
-  arch[128] = {'in_channels' :  [3] + [ch*item for item in [1, 2, 4, 8, 16]],
+  arch[128] = {'in_channels' :  [1] + [ch*item for item in [1, 2, 4, 8, 16]],
                'out_channels' : [item * ch for item in [1, 2, 4, 8, 16, 16]],
                'downsample' : [True] * 5 + [False],
                'resolution' : [64, 32, 16, 8, 4, 4],
                'attention' : {2**i: 2**i in [int(item) for item in attention.split('_')]
                               for i in range(2,8)}}
-  arch[64]  = {'in_channels' :  [3] + [ch*item for item in [1, 2, 4, 8]],
+  arch[64]  = {'in_channels' :  [1] + [ch*item for item in [1, 2, 4, 8]],
                'out_channels' : [item * ch for item in [1, 2, 4, 8, 16]],
                'downsample' : [True] * 4 + [False],
                'resolution' : [32, 16, 8, 4, 4],
                'attention' : {2**i: 2**i in [int(item) for item in attention.split('_')]
                               for i in range(2,7)}}
-  arch[32]  = {'in_channels' :  [3] + [item * ch for item in [4, 4, 4]],
+  arch[32]  = {'in_channels' :  [1] + [item * ch for item in [4, 4, 4]],
                'out_channels' : [item * ch for item in [4, 4, 4, 4]],
                'downsample' : [True, True, False, False],
                'resolution' : [16, 16, 16, 16],
