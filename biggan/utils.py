@@ -524,7 +524,7 @@ class MultiEpochSampler(torch.utils.data.Sampler):
 def get_data_loaders(dataset, data_root=None, augment=False, batch_size=64, 
                      num_workers=8, shuffle=True, load_in_mem=False, hdf5=False,
                      pin_memory=True, drop_last=True, start_itr=0,
-                     num_epochs=500, use_multiepoch_sampler=False,
+                     num_epochs=500, use_multiepoch_sampler=False, gray=True,
                      **kwargs):
 
   # Append /FILENAME.hdf5 to root if using hdf5
@@ -557,7 +557,10 @@ def get_data_loaders(dataset, data_root=None, augment=False, batch_size=64,
       if dataset in ['C10', 'C100']:
         train_transform = []
       else:
-        train_transform = [CenterCropLongEdge(), transforms.Resize(image_size), transforms.Grayscale(1)]
+        if gray is True:
+          train_transform = [CenterCropLongEdge(), transforms.Resize(image_size), transforms.Grayscale(1)]
+        else:
+          train_transform = [CenterCropLongEdge(), transforms.Resize(image_size)]
       # train_transform = [transforms.Resize(image_size), transforms.CenterCrop]
     train_transform = transforms.Compose(train_transform + [
                      transforms.ToTensor(),

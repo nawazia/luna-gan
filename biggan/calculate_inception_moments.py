@@ -49,7 +49,7 @@ def prepare_parser():
 def run(config):
   # Get loader
   config['drop_last'] = False
-  loaders = utils.get_data_loaders(**config)
+  loaders = utils.get_data_loaders(gray=False,**config)
 
   # Load inception net
   net = inception_utils.load_inception_net(parallel=config['parallel'])
