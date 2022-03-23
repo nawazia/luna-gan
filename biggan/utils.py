@@ -557,7 +557,7 @@ def get_data_loaders(dataset, data_root=None, augment=False, batch_size=64,
       if dataset in ['C10', 'C100']:
         train_transform = []
       else:
-        train_transform = [CenterCropLongEdge(), transforms.Resize(image_size)]
+        train_transform = [CenterCropLongEdge(), transforms.Resize(image_size), transforms.Grayscale(1)]
       # train_transform = [transforms.Resize(image_size), transforms.CenterCrop]
     train_transform = transforms.Compose(train_transform + [
                      transforms.ToTensor(),
