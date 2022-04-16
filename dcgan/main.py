@@ -365,7 +365,7 @@ for epoch in range(opt.niter):
                 newOutf = f'{opt.outf}/{epoch}/'
                 os.makedirs(newOutf)
                 for i in range(33):
-                    fake = netG(torch.randn(opt.num_patch_per_ct, nz, 1, 1, device=device))
+                    fake = netG(torch.randn(1, nz, 1, 1, device=device))
                     vutils.save_image(fake.detach(),
                             '%s/fake_samples_%03d.png' % (newOutf, i),
                             normalize=True)
