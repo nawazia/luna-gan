@@ -285,7 +285,7 @@ print(netD)
 
 criterion = nn.BCELoss()
 
-fixed_noise = torch.randn(opt.num_patch_per_ct, nz, 1, 1, device=device)
+# fixed_noise = torch.randn(opt.num_patch_per_ct, nz, 1, 1, device=device)
 real_label = 1
 fake_label = 0
 
@@ -362,10 +362,13 @@ for epoch in range(opt.niter):
                 vutils.save_image(real_cpu,
                         '%s/real_samples.png' % opt.outf,
                         normalize=True)
-                fake = netG(fixed_noise)
-                vutils.save_image(fake.detach(),
-                        '%s/fake_samples_epoch_%03d.png' % (opt.outf, epoch),
-                        normalize=True)
+                newOutf = f'{opt.outf}/{epoch}/'
+                os.makedirs(newOutf)
+                for i in range(33):
+                    fake = netG(torch.randn(opt.num_patch_per_ct, nz, 1, 1, device=device))
+                    vutils.save_image(fake.detach(),
+                            '%s/fake_samples_%03d.png' % (newOutf, i),
+                            normalize=True)
                 FID = fid(netG, opt.real_samples_path, 10000, device, opt.outf)
                 print('FID: %.4f' % (FID))
                 fidscores[epoch] = FID
