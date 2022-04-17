@@ -34,6 +34,7 @@ parser.add_argument('--lr_d', type=float, default=0.0001, help='learning rate fo
 parser.add_argument('--lr_g', type=float, default=0.0001, help='learning rate for Generator, default=0.0001')
 parser.add_argument('--beta1', type=float, default=0.5, help='beta1 for adam. default=0.5')
 parser.add_argument('--cuda', action='store_true', help='enables cuda')
+parser.add_argument('--generate', action='store_true', help='generate')
 parser.add_argument('--dry-run', action='store_true', help='check a single training cycle works')
 parser.add_argument('--ngpu', type=int, default=1, help='number of GPUs to use')
 parser.add_argument('--netG', default='', help="path to netG (to continue training)")
@@ -42,6 +43,8 @@ parser.add_argument('--outf', default='.', help='folder to output images and mod
 parser.add_argument('--manualSeed', type=int, help='manual seed')
 parser.add_argument('--classes', default='bedroom', help='comma separated list of classes for the lsun data set')
 parser.add_argument('--real_samples_path', default=None, help='path to real samples dir, for FID calculation')
+parser.add_argument('--num_gen', default=33, help='number of generated samples per epoch')
+
 
 opt = parser.parse_args()
 print(opt)
@@ -296,6 +299,16 @@ optimizerG = optim.Adam(netG.parameters(), lr=opt.lr_g, betas=(opt.beta1, 0.999)
 if opt.dry_run:
     opt.niter = 1
 
+if opt.generate:
+    assert opt.netG != ''
+    for i in range(opt.num_gen):
+        netG.zero_grad()
+        fake = netG(torch.randn(1, nz, 1, 1, device=device))
+        vutils.save_image(fake.detach(),
+                '%s/generated/fake_samples_%03d.png' % (opt.outf, i),
+                normalize=True)
+    opt.niter = 0
+
 fidscores = np.zeros(opt.niter)
 
 for epoch in range(opt.niter):
@@ -364,7 +377,7 @@ for epoch in range(opt.niter):
                         normalize=True)
                 newOutf = f'{opt.outf}/{epoch}/'
                 os.makedirs(newOutf)
-                for i in range(33):
+                for i in range(opt.num_gen):
                     fake = netG(torch.randn(1, nz, 1, 1, device=device))
                     vutils.save_image(fake.detach(),
                             '%s/fake_samples_%03d.png' % (newOutf, i),
