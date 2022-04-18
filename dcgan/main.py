@@ -43,7 +43,7 @@ parser.add_argument('--outf', default='.', help='folder to output images and mod
 parser.add_argument('--manualSeed', type=int, help='manual seed')
 parser.add_argument('--classes', default='bedroom', help='comma separated list of classes for the lsun data set')
 parser.add_argument('--real_samples_path', default=None, help='path to real samples dir, for FID calculation')
-parser.add_argument('--num_gen', default=33, help='number of generated samples per epoch')
+parser.add_argument('--num_gen', type=int, default=33, help='number of generated samples per epoch')
 
 
 opt = parser.parse_args()
