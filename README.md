@@ -3,4 +3,4 @@
 # BigGAN:
 First `!sh biggan/scripts/utils/prepare_data.sh`, then `!python biggan/train.py`
 # StyleGAN2:
-...idk yet bruh
+n/a
